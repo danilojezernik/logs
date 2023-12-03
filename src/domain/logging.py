@@ -10,6 +10,5 @@ class Logging(BaseModel):
     route_action: str
     status_code: int
     client_host: str
-    method: str
     content: str
     datum_vnosa: datetime.datetime = Field(default_factory=datetime.datetime.now)

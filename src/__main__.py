@@ -36,8 +36,8 @@ app.include_router(loggs_hsalen.router, prefix="/logs_hsa", tags=['Hypnosis Stud
 
 if __name__ == '__main__':
     # Drop the database and seed it
-    # db.drop()
-    # db.seed()
+    # db.drop_log()
+    # db.seed_log()
 
     # Run the FastAPI application using Uvicorn server
     uvicorn.run(app, host="0.0.0.0", port=env.PORT)
