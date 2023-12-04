@@ -107,7 +107,7 @@ async def delete_all_private_logs(current_user: str = Depends(get_current_user))
 
 # GET ALL PUBLIC LOGS
 @router.get("/public", operation_id="get_all_public_logs_hsa")
-async def get_all_public_logs_hsalen(current_user: str = Depends(get_current_user)) -> list[LoggingPublic]:
+async def get_all_public_logs_hsalen() -> list[LoggingPublic]:
     """
     This route handles the retrieval of all blogs from the database.
 
@@ -123,7 +123,7 @@ async def get_all_public_logs_hsalen(current_user: str = Depends(get_current_use
 
 # ADD NEW PUBLIC LOG
 @router.post("/public", operation_id="add_public_log_hsa")
-async def post_one_public_log(logs: LoggingPublic, current_user: str = Depends(get_current_user)) -> LoggingPublic | None:
+async def post_one_public_log(logs: LoggingPublic) -> LoggingPublic | None:
     """
     This route adds a new log to the database.
 
