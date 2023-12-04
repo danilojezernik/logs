@@ -1,12 +1,12 @@
 import datetime
 
-from src.domain.logging import Logging
+from src.domain.hsalen.logging_private import LoggingPrivate
 
-logging = [
-    Logging(
+logging_private = [
+    LoggingPrivate(
         route_action='route_action',
+        domain='PRIVATE',
         content='content',
-        status_code=200,
         client_host='localhost',
         datum_vnosa=datetime.datetime.now()
     ).dict(by_alias=True)
