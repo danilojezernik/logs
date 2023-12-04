@@ -1,6 +1,6 @@
 from src.domain.admin.user import User
 
-user = [
+user_dict = [
     User(
         username='danijezernik',
         email='dani.jezernik@gmail.com',

@@ -38,7 +38,7 @@ async def get_all_private_logs_hsalen(current_user: str = Depends(get_current_us
     """
 
     # Retrieve all blogs from the database
-    cursor = db.private_hsa.logging_private.find()
+    cursor = db.proces.logging_private.find()
     return [LoggingPrivate(**document) for document in cursor]
 
 
@@ -58,7 +58,7 @@ async def post_one_private_log(logs: LoggingPrivate, current_user: str = Depends
 
     # Add a new log to the database
     log_dict = logs.dict(by_alias=True)
-    insert_result = db.private_hsa.logging_private.insert_one(log_dict)
+    insert_result = db.proces.logging_private.insert_one(log_dict)
 
     # Check if the insertion was acknowledged and update the log's ID
     if insert_result.acknowledged:
@@ -87,7 +87,7 @@ async def delete_private_log_admin(_id: str, current_user: str = Depends(get_cur
     """
 
     # Attempt to delete the log from the database
-    delete_result = db.private_hsa.logging_private.delete_one({'_id': _id})
+    delete_result = db.proces.logging_private.delete_one({'_id': _id})
 
     # Check if the blog was successfully deleted
     if delete_result.deleted_count > 0:
@@ -99,7 +99,7 @@ async def delete_private_log_admin(_id: str, current_user: str = Depends(get_cur
 # DELETE ALL PRIVATE LOGS
 @router.delete("/private", operation_id="delete_all_private_logs")
 async def delete_all_private_logs(current_user: str = Depends(get_current_user)):
-    result = db.private_hsa.logging_private.delete_many({})
+    result = db.proces.logging_private.delete_many({})
     return {"deleted_count": result.deleted_count}
 
 
@@ -117,7 +117,7 @@ async def get_all_public_logs_hsalen(current_user: str = Depends(get_current_use
     """
 
     # Retrieve all blogs from the database
-    cursor = db.public_hsa.logging_public.find()
+    cursor = db.proces.logging_public.find()
     return [LoggingPublic(**document) for document in cursor]
 
 
@@ -137,7 +137,7 @@ async def post_one_public_log(logs: LoggingPublic, current_user: str = Depends(g
 
     # Add a new log to the database
     log_dict = logs.dict(by_alias=True)
-    insert_result = db.public_hsa.logging_public.insert_one(log_dict)
+    insert_result = db.proces.logging_public.insert_one(log_dict)
 
     # Check if the insertion was acknowledged and update the log's ID
     if insert_result.acknowledged:
@@ -166,7 +166,7 @@ async def delete_public_log_admin(_id: str, current_user: str = Depends(get_curr
     """
 
     # Attempt to delete the log from the database
-    delete_result = db.public_hsa.logging_public.delete_one({'_id': _id})
+    delete_result = db.proces.logging_public.delete_one({'_id': _id})
 
     # Check if the blog was successfully deleted
     if delete_result.deleted_count > 0:
@@ -178,5 +178,5 @@ async def delete_public_log_admin(_id: str, current_user: str = Depends(get_curr
 # DELETE ALL PUBLIC LOGS
 @router.delete("/public", operation_id="delete_all_public_logs")
 async def delete_all_public_logs(current_user: str = Depends(get_current_user)):
-    result = db.public_hsa.logging_public.delete_many({})
+    result = db.proces.logging_public.delete_many({})
     return {"deleted_count": result.deleted_count}
