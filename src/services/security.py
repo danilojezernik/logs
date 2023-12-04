@@ -49,7 +49,7 @@ def get_user(username: str):
     - If a user is found, it constructs a UserInDB instance using the retrieved data and returns it.
     - If no user is found, it returns None.
     """
-    user = db.user.user.find_one({"username": username})
+    user = db.user_admin.user.find_one({"username": username})
     if user:
         return UserInDB(**user)
 

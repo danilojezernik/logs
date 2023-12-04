@@ -4,6 +4,7 @@ from src import env
 
 from src.database.hsalen.private import logging_private
 from src.database.hsalen.public import logging_public
+from src.database.admin import user
 
 
 client = MongoClient(env.DB_CONNECTION_LOGGING)
@@ -11,7 +12,7 @@ client = MongoClient(env.DB_CONNECTION_LOGGING)
 # HYPNOSIS STUDIO ALEN COLLECTION
 private_hsa = client[env.DB_PROCES_PRIVATE_HSA_LOGGING]
 public_hsa = client[env.DB_PROCES_PUBLIC_HSA_LOGGING]
-user = client[env.DB_USER]
+user_admin = client[env.DB_USER]
 
 
 def drop_log():
