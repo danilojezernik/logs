@@ -99,7 +99,8 @@ async def delete_private_log_admin(_id: str, current_user: str = Depends(get_cur
 # DELETE ALL PRIVATE LOGS
 @router.delete("/private", operation_id="delete_all_private_logs")
 async def delete_all_private_logs(current_user: str = Depends(get_current_user)):
-    return db.private_hsa.logging_private.drop()
+    result = db.private_hsa.logging_private.delete_many({})
+    return {"deleted_count": result.deleted_count}
 
 
 # ROUTES FOR PUBLIC PAGES
@@ -177,4 +178,5 @@ async def delete_public_log_admin(_id: str, current_user: str = Depends(get_curr
 # DELETE ALL PUBLIC LOGS
 @router.delete("/public", operation_id="delete_all_public_logs")
 async def delete_all_public_logs(current_user: str = Depends(get_current_user)):
-    return db.public_hsa.logging_public.drop()
+    result = db.public_hsa.logging_public.delete_many({})
+    return {"deleted_count": result.deleted_count}
