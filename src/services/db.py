@@ -13,12 +13,12 @@ public_hsa = client[env.DB_PROCES_PUBLIC_HSA_LOGGING]
 
 
 def drop_log():
-    private_hsa.logging.drop()
-    public_hsa.logging.drop()
+    private_hsa.logging_private.drop()
+    public_hsa.logging_public.drop()
     pass
 
 
 def seed_log():
-    private_hsa.logging.insert_many(logging_private)
-    public_hsa.logging.insert_many(logging_public)
+    private_hsa.logging_private.insert_many(logging_private)
+    public_hsa.logging_public.insert_many(logging_public)
     pass
