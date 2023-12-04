@@ -15,6 +15,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src import env
+from src.routes import login
 from src.routes.hsalen import loggs_hsalen
 # from src.services import db
 from src.tags_metadata import tags_metadata
@@ -32,6 +33,7 @@ app.add_middleware(
 
 # Include various routers for different functionalities
 app.include_router(loggs_hsalen.router, prefix="/logs_hsa", tags=['Hypnosis Studio Alen'])
+app.include_router(login.router, prefix="/login")
 
 
 if __name__ == '__main__':

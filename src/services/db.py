@@ -11,6 +11,7 @@ client = MongoClient(env.DB_CONNECTION_LOGGING)
 # HYPNOSIS STUDIO ALEN COLLECTION
 private_hsa = client[env.DB_PROCES_PRIVATE_HSA_LOGGING]
 public_hsa = client[env.DB_PROCES_PUBLIC_HSA_LOGGING]
+user = client[env.DB_USER]
 
 
 def drop_log():

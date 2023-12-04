@@ -10,13 +10,15 @@ Routes:
 """
 
 # Import necessary modules and classes
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 
 from src.services import db
 
 # Logging
 from src.domain.hsalen.private import LoggingPrivate
 from src.domain.hsalen.public import LoggingPublic
+
+from src.services.security import get_current_user
 
 # Create a router for handling Mediji related endpoints
 router = APIRouter()
@@ -26,7 +28,7 @@ router = APIRouter()
 
 # GET ALL PRIVATE LOGS
 @router.get("/private", operation_id="get_all_private_logs_hsa")
-async def get_all_private_logs_hsalen() -> list[LoggingPrivate]:
+async def get_all_private_logs_hsalen(current_user: str = Depends(get_current_user)) -> list[LoggingPrivate]:
     """
     This route handles the retrieval of all blogs from the database.
 
@@ -42,7 +44,7 @@ async def get_all_private_logs_hsalen() -> list[LoggingPrivate]:
 
 # ADD NEW PRIVATE LOG
 @router.post("/private", operation_id="add_private_log_hsa")
-async def post_one_private_log(logs: LoggingPrivate) -> LoggingPrivate | None:
+async def post_one_private_log(logs: LoggingPrivate, current_user: str = Depends(get_current_user)) -> LoggingPrivate | None:
     """
     This route adds a new log to the database.
 
@@ -68,7 +70,7 @@ async def post_one_private_log(logs: LoggingPrivate) -> LoggingPrivate | None:
 
 # DELETE PRIVATE LOG BY ID
 @router.delete("/private/{_id}", operation_id="delete_private_log_admin")
-async def delete_private_log_admin(_id: str):
+async def delete_private_log_admin(_id: str, current_user: str = Depends(get_current_user)):
     """
     Route to delete a log by its ID from the database.
 
@@ -96,7 +98,7 @@ async def delete_private_log_admin(_id: str):
 
 # DELETE ALL PRIVATE LOGS
 @router.delete("/private", operation_id="delete_all_private_logs")
-async def delete_all_private_logs():
+async def delete_all_private_logs(current_user: str = Depends(get_current_user)):
     return db.private_hsa.logging_private.drop()
 
 
@@ -104,7 +106,7 @@ async def delete_all_private_logs():
 
 # GET ALL PUBLIC LOGS
 @router.get("/public", operation_id="get_all_public_logs_hsa")
-async def get_all_public_logs_hsalen() -> list[LoggingPublic]:
+async def get_all_public_logs_hsalen(current_user: str = Depends(get_current_user)) -> list[LoggingPublic]:
     """
     This route handles the retrieval of all blogs from the database.
 
@@ -120,7 +122,7 @@ async def get_all_public_logs_hsalen() -> list[LoggingPublic]:
 
 # ADD NEW PUBLIC LOG
 @router.post("/public", operation_id="add_public_log_hsa")
-async def post_one_public_log(logs: LoggingPublic) -> LoggingPublic | None:
+async def post_one_public_log(logs: LoggingPublic, current_user: str = Depends(get_current_user)) -> LoggingPublic | None:
     """
     This route adds a new log to the database.
 
@@ -146,7 +148,7 @@ async def post_one_public_log(logs: LoggingPublic) -> LoggingPublic | None:
 
 # DELETE PUBLIC LOG BY ID
 @router.delete("/public/{_id}", operation_id="delete_public_log_admin")
-async def delete_public_log_admin(_id: str):
+async def delete_public_log_admin(_id: str, current_user: str = Depends(get_current_user)):
     """
     Route to delete a log by its ID from the database.
 
@@ -174,5 +176,5 @@ async def delete_public_log_admin(_id: str):
 
 # DELETE ALL PUBLIC LOGS
 @router.delete("/public", operation_id="delete_all_public_logs")
-async def delete_all_public_logs():
+async def delete_all_public_logs(current_user: str = Depends(get_current_user)):
     return db.public_hsa.logging_public.drop()
