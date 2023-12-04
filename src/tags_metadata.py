@@ -1,6 +1,6 @@
 tags_metadata = [
     {
         "name": "Hypnosis Studio Alen",
-        "description": "uporablja se prefix /logs_hsa",
+        "description": "Logi za Private in Public. Uporablja se /private in /public za pogled v dejanja admina za lažje reševanje napak",
     }
 ]

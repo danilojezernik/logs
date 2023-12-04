@@ -95,7 +95,7 @@ async def delete_private_log_admin(_id: str):
 
 
 # DELETE ALL PRIVATE LOGS
-@router.delete("/public", operation_id="delete_all_private_logs")
+@router.delete("/private", operation_id="delete_all_private_logs")
 async def delete_all_private_logs():
     return db.private_hsa.logging_private.drop()
 
