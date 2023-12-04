@@ -1,6 +1,6 @@
 import datetime
 
-from src.domain.hsalen.logging_public import LoggingPublic
+from src.domain.hsalen.public import LoggingPublic
 
 logging_public = [
     LoggingPublic(

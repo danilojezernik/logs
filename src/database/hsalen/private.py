@@ -1,6 +1,6 @@
 import datetime
 
-from src.domain.hsalen.logging_private import LoggingPrivate
+from src.domain.hsalen.private import LoggingPrivate
 
 logging_private = [
     LoggingPrivate(

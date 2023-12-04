@@ -9,17 +9,16 @@ from src.database.hsalen.public import logging_public
 client = MongoClient(env.DB_CONNECTION_LOGGING)
 
 # HYPNOSIS STUDIO ALEN COLLECTION
-private_hsa = client[env.DB_PROCES_PRIVATE_HSA_LOGGING]
-public_hsa = client[env.DB_PROCES_PUBLIC_HSA_LOGGING]
+proces = client[env.DB_PROCES_LOGGING]
 
 
 def drop_log():
-    private_hsa.logging_private.drop()
-    public_hsa.logging_public.drop()
+    proces.logging_private.drop()
+    proces.logging_public.drop()
     pass
 
 
 def seed_log():
-    private_hsa.logging_private.insert_many(logging_private)
-    public_hsa.logging_public.insert_many(logging_public)
+    proces.logging_private.insert_many(logging_private)
+    proces.logging_public.insert_many(logging_public)
     pass

@@ -15,8 +15,8 @@ from fastapi import APIRouter, HTTPException
 from src.services import db
 
 # Logging
-from src.domain.hsalen.logging_private import LoggingPrivate
-from src.domain.hsalen.logging_public import LoggingPublic
+from src.domain.hsalen.private import LoggingPrivate
+from src.domain.hsalen.public import LoggingPublic
 
 # Create a router for handling Mediji related endpoints
 router = APIRouter()
@@ -36,7 +36,7 @@ async def get_all_private_logs_hsalen() -> list[LoggingPrivate]:
     """
 
     # Retrieve all blogs from the database
-    cursor = db.private_hsa.logging_private.find()
+    cursor = db.proces.logging_private.find()
     return [LoggingPrivate(**document) for document in cursor]
 
 
@@ -56,7 +56,7 @@ async def post_one_private_log(logs: LoggingPrivate) -> LoggingPrivate | None:
 
     # Add a new log to the database
     log_dict = logs.dict(by_alias=True)
-    insert_result = db.private_hsa.logging_private.insert_one(log_dict)
+    insert_result = db.proces.logging_private.insert_one(log_dict)
 
     # Check if the insertion was acknowledged and update the log's ID
     if insert_result.acknowledged:
@@ -85,7 +85,7 @@ async def delete_private_log_admin(_id: str):
     """
 
     # Attempt to delete the log from the database
-    delete_result = db.private_hsa.logging_private.delete_one({'_id': _id})
+    delete_result = db.proces.logging_private.delete_one({'_id': _id})
 
     # Check if the blog was successfully deleted
     if delete_result.deleted_count > 0:
@@ -97,7 +97,7 @@ async def delete_private_log_admin(_id: str):
 # DELETE ALL PRIVATE LOGS
 @router.delete("/public", operation_id="delete_all_private_logs")
 async def delete_all_private_logs():
-    return db.private_hsa.logging_private.drop()
+    return db.proces.logging_private.drop()
 
 
 # ROUTES FOR PUBLIC PAGES
@@ -114,7 +114,7 @@ async def get_all_public_logs_hsalen() -> list[LoggingPublic]:
     """
 
     # Retrieve all blogs from the database
-    cursor = db.public_hsa.logging_public.find()
+    cursor = db.proces.logging_public.find()
     return [LoggingPublic(**document) for document in cursor]
 
 
@@ -134,7 +134,7 @@ async def post_one_public_log(logs: LoggingPublic) -> LoggingPublic | None:
 
     # Add a new log to the database
     log_dict = logs.dict(by_alias=True)
-    insert_result = db.public_hsa.logging_public.insert_one(log_dict)
+    insert_result = db.proces.logging_public.insert_one(log_dict)
 
     # Check if the insertion was acknowledged and update the log's ID
     if insert_result.acknowledged:
@@ -163,7 +163,7 @@ async def delete_public_log_admin(_id: str):
     """
 
     # Attempt to delete the log from the database
-    delete_result = db.public_hsa.logging_public.delete_one({'_id': _id})
+    delete_result = db.proces.logging_public.delete_one({'_id': _id})
 
     # Check if the blog was successfully deleted
     if delete_result.deleted_count > 0:
@@ -175,4 +175,4 @@ async def delete_public_log_admin(_id: str):
 # DELETE ALL PUBLIC LOGS
 @router.delete("/public", operation_id="delete_all_public_logs")
 async def delete_all_public_logs():
-    return db.public_hsa.logging_public.drop()
+    return db.proces.logging_public.drop()
