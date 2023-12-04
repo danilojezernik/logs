@@ -5,6 +5,7 @@ from src import env
 from src.database.hsalen.logging_private import logging_private
 from src.database.hsalen.logging_public import logging_public
 
+
 client = MongoClient(env.DB_CONNECTION_LOGGING)
 
 # HYPNOSIS STUDIO ALEN COLLECTION
