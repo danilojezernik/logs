@@ -9,7 +9,7 @@ from src.database.admin.user import user_dict
 client = MongoClient(env.DB_CONNECTION_LOGGING)
 
 # HYPNOSIS STUDIO ALEN COLLECTION
-proces = client[env.DB_PROCES_PRIVATE_HSA_LOGGING]
+proces = client[env.DB_PROCES]
 
 
 def drop_log():
