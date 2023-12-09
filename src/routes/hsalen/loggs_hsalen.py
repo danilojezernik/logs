@@ -44,7 +44,7 @@ async def get_all_private_logs_hsalen(current_user: str = Depends(get_current_us
 
 # ADD NEW PRIVATE LOG
 @router.post("/private", operation_id="add_private_log_hsa")
-async def post_one_private_log(logs: LoggingPrivate, current_user: str = Depends(get_current_user)) -> LoggingPrivate | None:
+async def post_one_private_log(logs: LoggingPrivate) -> LoggingPrivate | None:
     """
     This route adds a new log to the database.
 
