@@ -12,6 +12,7 @@ Routes:
 # Import necessary modules and classes
 from fastapi import APIRouter, HTTPException, Depends
 
+from src.domain.hsalen.backend import BackendLogs
 from src.services import db
 
 # Logging
@@ -179,4 +180,83 @@ async def delete_public_log_admin(_id: str, current_user: str = Depends(get_curr
 @router.delete("/public", operation_id="delete_all_public_logs")
 async def delete_all_public_logs(current_user: str = Depends(get_current_user)):
     result = db.proces.logging_public.delete_many({})
+    return {"deleted_count": result.deleted_count}
+
+
+# ROUTES FOR BACKEND PAGES
+
+# GET ALL BACKEND LOGS
+@router.get("/backend", operation_id="get_all_backend_logs_hsa")
+async def get_all_backend_logs_hsalen() -> list[BackendLogs]:
+    """
+    This route handles the retrieval of all blogs from the database.
+
+    Behavior:
+    - Retrieves all blogs from the database.
+    - Returns a list of Blog objects.
+    """
+
+    # Retrieve all blogs from the database
+    cursor = db.proces.backend_logs.find()
+    return [BackendLogs(**document) for document in cursor]
+
+
+# ADD NEW BACKEND LOG
+@router.post("/backend", operation_id="add_backend_log_hsa")
+async def post_one_backend_log(logs: BackendLogs) -> BackendLogs | None:
+    """
+    This route adds a new log to the database.
+
+    Parameters:
+    - logs (Logging): The log object to be added.
+
+    Behavior:
+    - Adds a new log to the database.
+    - Returns the added Logging object if successful, or None if unsuccessful.
+    """
+
+    # Add a new log to the database
+    log_dict = logs.dict(by_alias=True)
+    insert_result = db.proces.backend_logs.insert_one(log_dict)
+
+    # Check if the insertion was acknowledged and update the log's ID
+    if insert_result.acknowledged:
+        log_dict['_id'] = str(insert_result.inserted_id)
+        return BackendLogs(**log_dict)
+    else:
+        return None
+
+
+# DELETE BACKEND LOG BY ID
+@router.delete("/backend/{_id}", operation_id="delete_backend_log_admin")
+async def delete_backend_log_admin(_id: str, current_user: str = Depends(get_current_user)):
+    """
+    Route to delete a log by its ID from the database.
+
+    Arguments:
+        _id (str): The ID of the log to be deleted.
+        current_user (str): The current authenticated user.
+
+    Returns:
+        dict: A message indicating the status of the deletion.
+
+    Raises:
+        HTTPException: If the log is not found for deletion.
+        :param _id: ID of the log
+    """
+
+    # Attempt to delete the log from the database
+    delete_result = db.proces.backend_logs.delete_one({'_id': _id})
+
+    # Check if the blog was successfully deleted
+    if delete_result.deleted_count > 0:
+        return {"message": "Log deleted successfully"}
+    else:
+        raise HTTPException(status_code=404, detail=f"Log by ID:({_id}) not found")
+
+
+# DELETE ALL PUBLIC LOGS
+@router.delete("/backend", operation_id="delete_all_backend_logs")
+async def delete_all_backend_logs(current_user: str = Depends(get_current_user)):
+    result = db.proces.backend_logs.delete_many({})
     return {"deleted_count": result.deleted_count}
