@@ -15,6 +15,7 @@ def drop_log():
     proces.logging_private.drop()
     proces.logging_public.drop()
     proces.backend_logs.drop()
+
     proces.user_dict.drop()
     pass
 
@@ -23,5 +24,6 @@ def seed_log():
     proces.logging_private.insert_many(logging_private)
     proces.logging_public.insert_many(logging_public)
     proces.backend_logs.insert_many(backend_logs)
+
     proces.user_dict.insert_many(user_dict)
     pass
