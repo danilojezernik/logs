@@ -10,7 +10,8 @@ Routes:
 """
 
 # Import necessary modules and classes
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Query
+from typing import Dict
 
 from src.domain.hsalen.backend import BackendLogs
 from src.services import db
@@ -41,6 +42,7 @@ async def get_all_private_logs_hsalen(current_user: str = Depends(get_current_us
     # Retrieve all blogs from the database
     cursor = db.proces.logging_private.find()
     return [LoggingPrivate(**document) for document in cursor]
+
 
 
 # ADD NEW PRIVATE LOG
@@ -120,6 +122,23 @@ async def get_all_public_logs_hsalen() -> list[LoggingPublic]:
     # Retrieve all blogs from the database
     cursor = db.proces.logging_public.find()
     return [LoggingPublic(**document) for document in cursor]
+
+
+# GET COUNT OF LOGS CONTAINING DEVICE TYPE IN CONTENT
+@router.get("/count_logs_with_desktop", operation_id="count_logs_with_desktop")
+async def count_logs_with_desktop(device_type: str = Query(..., description="Specify the device type (e.g., 'Mobile' or 'Desktop')")) -> Dict[str, int]:
+    """
+    This route handles the counting of logs containing a specified device type in the content.
+
+    Behavior:
+    - Counts the number of logs with the specified device type in the content.
+    - Returns a dictionary with the count.
+    """
+
+    # Count logs with the specified device type in the content
+    count = db.proces.logging_public.count_documents({"content": {"$regex": device_type, "$options": "i"}})
+
+    return {"count": count}
 
 
 # ADD NEW PUBLIC LOG
