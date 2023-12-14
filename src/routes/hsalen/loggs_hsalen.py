@@ -11,6 +11,8 @@ Routes:
 
 # Import necessary modules and classes
 from fastapi import APIRouter, HTTPException, Depends, Query
+from fastapi.responses import JSONResponse
+
 from typing import Dict
 
 from src.domain.hsalen.backend import BackendLogs
@@ -274,8 +276,31 @@ async def delete_backend_log_admin(_id: str, current_user: str = Depends(get_cur
         raise HTTPException(status_code=404, detail=f"Log by ID:({_id}) not found")
 
 
-# DELETE ALL PUBLIC LOGS
+# DELETE ALL BACKEND LOGS
 @router.delete("/backend", operation_id="delete_all_backend_logs")
 async def delete_all_backend_logs(current_user: str = Depends(get_current_user)):
     result = db.proces.backend_logs.delete_many({})
     return {"deleted_count": result.deleted_count}
+
+
+# GET UNIQUE CLIENT HOSTS WITH VISIT COUNTS
+@router.get("/unique_client_hosts", operation_id="get_unique_client_hosts")
+async def get_unique_client_hosts():
+    """
+    This route handles the retrieval of unique client hosts and their visit counts.
+
+    Behavior:
+    - Returns a list of dictionaries containing client_host and count fields.
+    """
+    cursor = db.proces.backend_logs.find()
+    unique_client_hosts = {}
+
+    for document in cursor:
+        client_host = document["client_host"]
+        if client_host in unique_client_hosts:
+            unique_client_hosts[client_host]["count"] += 1
+        else:
+            unique_client_hosts[client_host] = {"client_host": client_host, "count": 1}
+
+    response_data = list(unique_client_hosts.values())
+    return JSONResponse(content=response_data, status_code=200)
