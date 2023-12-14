@@ -208,7 +208,7 @@ async def delete_all_public_logs(current_user: str = Depends(get_current_user)):
 
 # GET ALL BACKEND LOGS
 @router.get("/backend", operation_id="get_all_backend_logs_hsa")
-async def get_all_backend_logs_hsalen(current_user: str = Depends(get_current_user)) -> list[BackendLogs]:
+async def get_all_backend_logs_hsalen() -> list[BackendLogs]:
     """
     This route handles the retrieval of all blogs from the database.
 
@@ -285,7 +285,7 @@ async def delete_all_backend_logs(current_user: str = Depends(get_current_user))
 
 # GET UNIQUE CLIENT HOSTS WITH VISIT COUNTS
 @router.get("/unique_client_hosts", operation_id="get_unique_client_hosts")
-async def get_unique_client_hosts(current_user: str = Depends(get_current_user)):
+async def get_unique_client_hosts():
     """
     This route handles the retrieval of unique client hosts and their visit counts.
 
