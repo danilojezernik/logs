@@ -13,6 +13,9 @@ Routes:
 from fastapi import APIRouter, HTTPException, Depends, Query
 from fastapi.responses import JSONResponse
 
+import urllib.request
+import json
+
 from typing import Dict
 
 from src.domain.hsalen.backend import BackendLogs
@@ -304,3 +307,13 @@ async def get_unique_client_hosts():
 
     response_data = list(unique_client_hosts.values())
     return JSONResponse(content=response_data, status_code=200)
+
+
+@router.get('/test')
+async def testing():
+
+    with urllib.request.urlopen("https://geolocation-db.com/json") as url:
+        data = json.loads(url.read().decode())
+
+    city = data.get("city", "City Not Found")  # Replace "City Not Found" with a default value if "city" is not present
+    return {"city": city}

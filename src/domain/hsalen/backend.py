@@ -10,5 +10,6 @@ class BackendLogs(BaseModel):
     route_action: str
     domain: str
     client_host: str
+    city: str
     content: str
     datum_vnosa: datetime.datetime = Field(default_factory=datetime.datetime.now)
