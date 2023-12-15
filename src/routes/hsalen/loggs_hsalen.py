@@ -10,10 +10,11 @@ Routes:
 """
 
 # Import necessary modules and classes
-from fastapi import APIRouter, HTTPException, Depends, Query
+from fastapi import APIRouter, HTTPException, Depends, Query, Request, status
 from fastapi.responses import JSONResponse
-
-from typing import Dict
+from typing import Dict, List
+import requests
+from pydantic import BaseModel
 
 from src.domain.hsalen.backend import BackendLogs
 from src.services import db
@@ -304,3 +305,4 @@ async def get_unique_client_hosts():
 
     response_data = list(unique_client_hosts.values())
     return JSONResponse(content=response_data, status_code=200)
+
