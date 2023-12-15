@@ -10,11 +10,12 @@ Routes:
 """
 
 # Import necessary modules and classes
-from fastapi import APIRouter, HTTPException, Depends, Query, Request, status
+from fastapi import APIRouter, HTTPException, Depends, Query, status
 from fastapi.responses import JSONResponse
-from typing import Dict, List
-import requests
-from pydantic import BaseModel
+from typing import Dict
+
+import httpx
+import asyncio
 
 from src.domain.hsalen.backend import BackendLogs
 from src.services import db
@@ -45,7 +46,6 @@ async def get_all_private_logs_hsalen(current_user: str = Depends(get_current_us
     # Retrieve all blogs from the database
     cursor = db.proces.logging_private.find()
     return [LoggingPrivate(**document) for document in cursor]
-
 
 
 # ADD NEW PRIVATE LOG
@@ -129,7 +129,9 @@ async def get_all_public_logs_hsalen() -> list[LoggingPublic]:
 
 # GET COUNT OF LOGS CONTAINING DEVICE TYPE IN CONTENT
 @router.get("/count_logs_with_desktop", operation_id="count_logs_with_desktop")
-async def count_logs_with_desktop(device_type: str = Query(..., description="Specify the device type (e.g., 'Mobile' or 'Desktop')")) -> Dict[str, int]:
+async def count_logs_with_desktop(
+        device_type: str = Query(..., description="Specify the device type (e.g., 'Mobile' or 'Desktop')")) -> Dict[
+    str, int]:
     """
     This route handles the counting of logs containing a specified device type in the content.
 
@@ -306,3 +308,35 @@ async def get_unique_client_hosts():
     response_data = list(unique_client_hosts.values())
     return JSONResponse(content=response_data, status_code=200)
 
+
+@router.get("/get_geolocation")
+async def get_geolocation_route():
+    try:
+        # Fetch client hosts from the backend_logs collection
+        client_hosts = db.proces.backend_logs.distinct("client_host")
+        print(client_hosts)
+
+        # Function to get geolocation data for a given IP address
+        async def get_geolocation(ip_address: str) -> dict:
+            url = f"https://ipinfo.io/{ip_address}/json"
+            async with httpx.AsyncClient() as client:
+                response = await client.get(url)
+                if response.status_code == 200:
+                    return response.json()
+                else:
+                    print('ERROR')
+                    raise HTTPException(status_code=response.status_code, detail="Failed to fetch geolocation data function.")
+
+        # Use asyncio.gather to concurrently fetch geolocation data for all client hosts
+        tasks = [get_geolocation(client_host) for client_host in client_hosts]
+        geolocation_data_list = await asyncio.gather(*tasks)
+
+        # Return the list of geolocation data
+        return geolocation_data_list
+
+    except Exception as e:
+        # Log the exception or handle it as needed
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to fetch geolocation data. Error: {str(e)}"
+        )
