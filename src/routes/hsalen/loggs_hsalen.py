@@ -8,14 +8,12 @@ Routes:
 4. Edit an existing blog by ID
 5. Delete a blog by ID
 """
-
 # Import necessary modules and classes
-from fastapi import APIRouter, HTTPException, Depends, Query, status
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, HTTPException, Depends, Query, Request
+from fastapi.responses import JSONResponse, StreamingResponse
 from typing import Dict
-
-import httpx
-import asyncio
+import pandas as pd
+import io
 
 from src.domain.hsalen.backend import BackendLogs
 from src.services import db
@@ -34,7 +32,7 @@ router = APIRouter()
 
 # GET ALL PRIVATE LOGS
 @router.get("/private", operation_id="get_all_private_logs_hsa")
-async def get_all_private_logs_hsalen(current_user: str = Depends(get_current_user)) -> list[LoggingPrivate]:
+async def get_all_private_logs_hsalen() -> list[LoggingPrivate]:
     """
     This route handles the retrieval of all blogs from the database.
 
@@ -309,34 +307,45 @@ async def get_unique_client_hosts():
     return JSONResponse(content=response_data, status_code=200)
 
 
-@router.get("/get_geolocation")
-async def get_geolocation_route():
-    try:
-        # Fetch client hosts from the backend_logs collection
-        client_hosts = db.proces.backend_logs.distinct("client_host")
-        print(client_hosts)
+# EXPORTS EXCEL
 
-        # Function to get geolocation data for a given IP address
-        async def get_geolocation(ip_address: str) -> dict:
-            url = f"https://ipinfo.io/{ip_address}/json"
-            async with httpx.AsyncClient() as client:
-                response = await client.get(url)
-                if response.status_code == 200:
-                    return response.json()
-                else:
-                    print('ERROR')
-                    raise HTTPException(status_code=response.status_code, detail="Failed to fetch geolocation data function.")
+# Unique Client Hosts
+@router.get("/unique_client_hosts/export", operation_id="export_unique_client_hosts")
+async def export_unique_client_hosts():
+    """
+    This route handles the retrieval of unique client hosts and their visit counts
+    and exports the data to an Excel file.
 
-        # Use asyncio.gather to concurrently fetch geolocation data for all client hosts
-        tasks = [get_geolocation(client_host) for client_host in client_hosts]
-        geolocation_data_list = await asyncio.gather(*tasks)
+    Behavior:
+    - Returns a StreamingResponse with the Excel file.
+    """
+    database = db.proces.backend_logs.find()
+    unique_client_hosts = {}
 
-        # Return the list of geolocation data
-        return geolocation_data_list
+    for document in database:
+        client_host = document["client_host"]
+        if client_host in unique_client_hosts:
+            unique_client_hosts[client_host]["count"] += 1
+        else:
+            unique_client_hosts[client_host] = {"client_host": client_host, "count": 1}
 
-    except Exception as e:
-        # Log the exception or handle it as needed
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to fetch geolocation data. Error: {str(e)}"
-        )
+    response_data = list(unique_client_hosts.values())
+
+    # Convert data to a DataFrame
+    df = pd.DataFrame(response_data)
+
+    # Use BytesIO to create a buffer for the Excel file
+    excel_data = io.BytesIO()
+
+    # Export the DataFrame to Excel
+    df.to_excel(excel_data, index=False, sheet_name="Unique_Client_Hosts")
+
+    # Set the filename for the Excel file
+    filename = "unique_client_hosts.xlsx"
+
+    # Move the buffer's position to the beginning
+    excel_data.seek(0)
+
+    # Return the Excel file as a StreamingResponse
+    return StreamingResponse(excel_data, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                             headers={'Content-Disposition': f'attachment; filename={filename}'})
