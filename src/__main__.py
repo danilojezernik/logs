@@ -35,6 +35,7 @@ app.add_middleware(
 app.include_router(loggs_hsalen.router, prefix="/logs_hsa", tags=['Hypnosis Studio Alen'])
 app.include_router(login.router, prefix="/login")
 
+print("this is the updated version")
 
 if __name__ == '__main__':
     # Drop the database and seed it
