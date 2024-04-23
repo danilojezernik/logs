@@ -11,3 +11,5 @@ DB_CONNECTION_LOGGING = str(os.getenv('DB_CONNECTION_LOGGING'))
 DB_USER = str(os.getenv('DB_USER'))
 SECRET_KEY = str(os.getenv('SECRET_KEY'))
 ALGORITHM = str(os.getenv('ALGORITHM'))
+
+print('lalalalala')
