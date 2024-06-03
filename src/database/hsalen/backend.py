@@ -1,6 +1,6 @@
 import datetime
 
-from src.domain.backend import BackendLogs
+from src.domain.hsalen.backend import BackendLogs
 
 backend_logs = [
     BackendLogs(

@@ -16,9 +16,9 @@ import pandas as pd
 from fastapi import APIRouter, HTTPException, Depends, Query
 from fastapi.responses import JSONResponse, StreamingResponse
 
-from src.domain.backend import BackendLogs
-from src.domain.private import LoggingPrivate
-from src.domain.public import LoggingPublic
+from src.domain.portfolio_dj.backend import BackendLogs
+from src.domain.portfolio_dj.private import LoggingPrivate
+from src.domain.portfolio_dj.public import LoggingPublic
 from src.services import db
 from src.services.security import get_current_user
 

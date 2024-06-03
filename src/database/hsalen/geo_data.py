@@ -1,6 +1,6 @@
 import datetime
 
-from src.domain.geo_data import GeoData
+from src.domain.hsalen.geo_data import GeoData
 
 geo_data_log = [
     GeoData(

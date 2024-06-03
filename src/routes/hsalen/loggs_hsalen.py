@@ -15,12 +15,12 @@ from typing import Dict
 import pandas as pd
 import io
 
-from src.domain.backend import BackendLogs
+from src.domain.hsalen.backend import BackendLogs
 from src.services import db
 
 # Logging
-from src.domain.private import LoggingPrivate
-from src.domain.public import LoggingPublic
+from src.domain.hsalen.private import LoggingPrivate
+from src.domain.hsalen.public import LoggingPublic
 
 from src.services.security import get_current_user
 

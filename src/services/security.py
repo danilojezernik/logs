@@ -7,9 +7,9 @@ from fastapi.security import OAuth2PasswordBearer
 from typing import Annotated
 from fastapi import Depends, HTTPException, status
 
-from src.domain.user import User
+from src.domain.admin.user import User
 from src import env
-from src.domain.user_in_db import UserInDB
+from src.domain.admin.user_in_db import UserInDB
 from src.api.token_data import TokenData
 from src.services import db
 

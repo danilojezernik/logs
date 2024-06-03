@@ -2,11 +2,11 @@ from pymongo import MongoClient
 
 from src import env
 
-from src.database.backend import backend_logs
-from src.database.private import logging_private
-from src.database.public import logging_public
-from src.database.user import user_dict
-from src.database.geo_data import geo_data_log
+from src.database.hsalen.backend import backend_logs
+from src.database.hsalen.private import logging_private
+from src.database.hsalen.public import logging_public
+from src.database.admin.user import user_dict
+from src.database.hsalen.geo_data import geo_data_log
 
 client = MongoClient(env.DB_CONNECTION_LOGGING)
 proces = client[env.DB_PROCES]
