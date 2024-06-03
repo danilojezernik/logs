@@ -15,12 +15,12 @@ from typing import Dict
 import pandas as pd
 import io
 
-from src.domain.hsalen.backend import BackendLogs
+from src.domain.backend import BackendLogs
 from src.services import db
 
 # Logging
-from src.domain.hsalen.private import LoggingPrivate
-from src.domain.hsalen.public import LoggingPublic
+from src.domain.private import LoggingPrivate
+from src.domain.public import LoggingPublic
 
 from src.services.security import get_current_user
 
@@ -42,7 +42,7 @@ async def get_all_private_logs_hsalen() -> list[LoggingPrivate]:
     """
 
     # Retrieve all blogs from the database
-    cursor = db.proces.logging_private.find()
+    cursor = db.proces_hsa.logging_private.find()
     return [LoggingPrivate(**document) for document in cursor]
 
 
@@ -62,7 +62,7 @@ async def post_one_private_log(logs: LoggingPrivate) -> LoggingPrivate | None:
 
     # Add a new log to the database
     log_dict = logs.dict(by_alias=True)
-    insert_result = db.proces.logging_private.insert_one(log_dict)
+    insert_result = db.proces_hsa.logging_private.insert_one(log_dict)
 
     # Check if the insertion was acknowledged and update the log's ID
     if insert_result.acknowledged:
@@ -91,7 +91,7 @@ async def delete_private_log_admin(_id: str, current_user: str = Depends(get_cur
     """
 
     # Attempt to delete the log from the database
-    delete_result = db.proces.logging_private.delete_one({'_id': _id})
+    delete_result = db.proces_hsa.logging_private.delete_one({'_id': _id})
 
     # Check if the blog was successfully deleted
     if delete_result.deleted_count > 0:
@@ -103,7 +103,7 @@ async def delete_private_log_admin(_id: str, current_user: str = Depends(get_cur
 # DELETE ALL PRIVATE LOGS
 @router.delete("/private", operation_id="delete_all_private_logs")
 async def delete_all_private_logs(current_user: str = Depends(get_current_user)):
-    result = db.proces.logging_private.delete_many({})
+    result = db.proces_hsa.logging_private.delete_many({})
     return {"deleted_count": result.deleted_count}
 
 
@@ -121,7 +121,7 @@ async def get_all_public_logs_hsalen() -> list[LoggingPublic]:
     """
 
     # Retrieve all blogs from the database
-    cursor = db.proces.logging_public.find()
+    cursor = db.proces_hsa.logging_public.find()
     return [LoggingPublic(**document) for document in cursor]
 
 
@@ -139,7 +139,7 @@ async def count_logs_with_desktop(
     """
 
     # Count logs with the specified device type in the content
-    count = db.proces.logging_public.count_documents({"content": {"$regex": device_type, "$options": "i"}})
+    count = db.proces_hsa.logging_public.count_documents({"content": {"$regex": device_type, "$options": "i"}})
 
     return {"count": count}
 
@@ -160,7 +160,7 @@ async def post_one_public_log(logs: LoggingPublic) -> LoggingPublic | None:
 
     # Add a new log to the database
     log_dict = logs.dict(by_alias=True)
-    insert_result = db.proces.logging_public.insert_one(log_dict)
+    insert_result = db.proces_hsa.logging_public.insert_one(log_dict)
 
     # Check if the insertion was acknowledged and update the log's ID
     if insert_result.acknowledged:
@@ -189,7 +189,7 @@ async def delete_public_log_admin(_id: str, current_user: str = Depends(get_curr
     """
 
     # Attempt to delete the log from the database
-    delete_result = db.proces.logging_public.delete_one({'_id': _id})
+    delete_result = db.proces_hsa.logging_public.delete_one({'_id': _id})
 
     # Check if the blog was successfully deleted
     if delete_result.deleted_count > 0:
@@ -201,7 +201,7 @@ async def delete_public_log_admin(_id: str, current_user: str = Depends(get_curr
 # DELETE ALL PUBLIC LOGS
 @router.delete("/public", operation_id="delete_all_public_logs")
 async def delete_all_public_logs(current_user: str = Depends(get_current_user)):
-    result = db.proces.logging_public.delete_many({})
+    result = db.proces_hsa.logging_public.delete_many({})
     return {"deleted_count": result.deleted_count}
 
 
@@ -219,7 +219,7 @@ async def get_all_backend_logs_hsalen() -> list[BackendLogs]:
     """
 
     # Retrieve all blogs from the database
-    cursor = db.proces.backend_logs.find()
+    cursor = db.proces_hsa.backend_logs.find()
     return [BackendLogs(**document) for document in cursor]
 
 
@@ -239,7 +239,7 @@ async def post_one_backend_log(logs: BackendLogs) -> BackendLogs | None:
 
     # Add a new log to the database
     log_dict = logs.dict(by_alias=True)
-    insert_result = db.proces.backend_logs.insert_one(log_dict)
+    insert_result = db.proces_hsa.backend_logs.insert_one(log_dict)
 
     # Check if the insertion was acknowledged and update the log's ID
     if insert_result.acknowledged:
@@ -268,7 +268,7 @@ async def delete_backend_log_admin(_id: str, current_user: str = Depends(get_cur
     """
 
     # Attempt to delete the log from the database
-    delete_result = db.proces.backend_logs.delete_one({'_id': _id})
+    delete_result = db.proces_hsa.backend_logs.delete_one({'_id': _id})
 
     # Check if the blog was successfully deleted
     if delete_result.deleted_count > 0:
@@ -280,7 +280,7 @@ async def delete_backend_log_admin(_id: str, current_user: str = Depends(get_cur
 # DELETE ALL BACKEND LOGS
 @router.delete("/backend", operation_id="delete_all_backend_logs")
 async def delete_all_backend_logs(current_user: str = Depends(get_current_user)):
-    result = db.proces.backend_logs.delete_many({})
+    result = db.proces_hsa.backend_logs.delete_many({})
     return {"deleted_count": result.deleted_count}
 
 
@@ -293,7 +293,7 @@ async def get_unique_client_hosts():
     Behavior:
     - Returns a list of dictionaries containing client_host and count fields.
     """
-    cursor = db.proces.backend_logs.find()
+    cursor = db.proces_hsa.backend_logs.find()
     unique_client_hosts = {}
 
     for document in cursor:
@@ -319,7 +319,7 @@ async def export_unique_client_hosts():
     Behavior:
     - Returns a StreamingResponse with the Excel file.
     """
-    database = db.proces.backend_logs.find()
+    database = db.proces_hsa.backend_logs.find()
     unique_client_hosts = {}
 
     for document in database:
