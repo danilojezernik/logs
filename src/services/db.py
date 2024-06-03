@@ -9,9 +9,10 @@ from src.database.admin.user import user_dict
 from src.database.geo_data import geo_data_log
 
 client_hsa = MongoClient(env.DB_CONNECTION_LOGGING)
-client_portfolio_dj = MongoClient(env.DB_CONNECTION_LOGGING_PDJ)
 proces_hsa = client_hsa[env.DB_PROCES]
-proces_portfolio_dj = client_portfolio_dj[env.DB_PROCES]
+
+client_portfolio_dj = MongoClient(env.DB_CONNECTION_LOGGING_PDJ)
+proces_portfolio_dj = client_portfolio_dj[env.DB_PROCESS]
 
 
 def drop_log():
