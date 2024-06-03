@@ -49,7 +49,7 @@ def get_user(username: str):
     - If a user is found, it constructs a UserInDB instance using the retrieved data and returns it.
     - If no user is found, it returns None.
     """
-    user = db.proces.user_dict.find_one({"username": username})
+    user = db.proces_hsa.user_dict.find_one({"username": username})
     if user:
         return UserInDB(**user)
 
