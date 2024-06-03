@@ -27,7 +27,6 @@ def drop_log():
     proces_portfolio_dj.backend_logs.drop()
     proces_portfolio_dj.geo_data_log.drop()
 
-    proces_portfolio_dj.user_dict.drop()
     pass
 
 
@@ -44,5 +43,4 @@ def seed_log():
     proces_portfolio_dj.backend_logs.insert_many(backend_logs)
     proces_portfolio_dj.geo_data_log.insert_many(geo_data_log)
 
-    proces_portfolio_dj.user_dict.insert_many(user_dict)
     pass
