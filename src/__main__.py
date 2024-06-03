@@ -43,8 +43,8 @@ print("this is the updated version")
 
 if __name__ == '__main__':
     # Drop the database and seed it
-    db.drop_log()
-    db.seed_log()
+    # db.drop_log()
+    # db.seed_log()
     
 
     # Run the FastAPI application using Uvicorn server

@@ -22,6 +22,7 @@ def drop_log():
     proces_hsa.geo_data_log.drop()
 
     proces_hsa.user_dict.drop()
+    proces_portfolio_dj.user_dict.drop()
 
     proces_portfolio_dj.logging_private.drop()
     proces_portfolio_dj.logging_public.drop()
@@ -38,6 +39,7 @@ def seed_log():
     proces_hsa.geo_data_log.insert_many(geo_data_log)
 
     proces_hsa.user_dict.insert_many(user_dict)
+    proces_portfolio_dj.user_dict.insert_many(user_dict)
 
     proces_portfolio_dj.logging_private.insert_many(logging_private)
     proces_portfolio_dj.logging_public.insert_many(logging_public)
