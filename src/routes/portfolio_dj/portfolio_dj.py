@@ -8,21 +8,21 @@ Routes:
 4. Edit an existing blog by ID
 5. Delete a blog by ID
 """
+import io
+from typing import Dict
+
+import pandas as pd
 # Import necessary modules and classes
 from fastapi import APIRouter, HTTPException, Depends, Query
 from fastapi.responses import JSONResponse, StreamingResponse
-from typing import Dict
-import pandas as pd
-import io
 
 from src.domain.backend import BackendLogs
-from src.services import db
-
-# Logging
 from src.domain.private import LoggingPrivate
 from src.domain.public import LoggingPublic
-
+from src.services import db
 from src.services.security import get_current_user
+
+# Logging
 
 # Create a router for handling Mediji related endpoints
 router = APIRouter()
@@ -32,7 +32,7 @@ router = APIRouter()
 
 # GET ALL PRIVATE LOGS
 @router.get("/private", operation_id="get_all_private_logs_hsa")
-async def get_all_private_logs_hsalen() -> list[LoggingPrivate]:
+async def get_all_private_logs_portfolio_dj() -> list[LoggingPrivate]:
     """
     This route handles the retrieval of all blogs from the database.
 
@@ -111,7 +111,7 @@ async def delete_all_private_logs(current_user: str = Depends(get_current_user))
 
 # GET ALL PUBLIC LOGS
 @router.get("/public", operation_id="get_all_public_logs_hsa")
-async def get_all_public_logs_hsalen() -> list[LoggingPublic]:
+async def get_all_public_logs_portfolio_dj() -> list[LoggingPublic]:
     """
     This route handles the retrieval of all blogs from the database.
 
@@ -209,7 +209,7 @@ async def delete_all_public_logs(current_user: str = Depends(get_current_user)):
 
 # GET ALL BACKEND LOGS
 @router.get("/backend", operation_id="get_all_backend_logs_hsa")
-async def get_all_backend_logs_hsalen() -> list[BackendLogs]:
+async def get_all_backend_logs_portfolio_dj() -> list[BackendLogs]:
     """
     This route handles the retrieval of all blogs from the database.
 
@@ -224,7 +224,7 @@ async def get_all_backend_logs_hsalen() -> list[BackendLogs]:
 
 
 # ADD NEW BACKEND LOG
-@router.post("/backend", operation_id="add_backend_log_hsa")
+@router.post("/backend", operation_id="add_backend_log_portfolio_dj")
 async def post_one_backend_log(logs: BackendLogs) -> BackendLogs | None:
     """
     This route adds a new log to the database.

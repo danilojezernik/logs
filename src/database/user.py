@@ -1,4 +1,4 @@
-from src.domain.admin.user import User
+from src.domain.user import User
 
 user_dict = [
     User(

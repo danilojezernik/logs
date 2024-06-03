@@ -17,6 +17,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src import env
 from src.routes import login
 from src.routes.hsalen import loggs_hsalen
+from src.routes.portfolio_dj import portfolio_dj
 # from src.services import db
 from src.tags_metadata import tags_metadata
 
@@ -33,6 +34,8 @@ app.add_middleware(
 
 # Include various routers for different functionalities
 app.include_router(loggs_hsalen.router, prefix="/logs_hsa", tags=['Hypnosis Studio Alen'])
+app.include_router(portfolio_dj.router, prefix="/portfolio_dj", tags=['Hypnosis Studio Alen'])
+
 app.include_router(login.router, prefix="/login")
 
 print("this is the updated version")
