@@ -18,8 +18,6 @@ from src import env
 from src.routes import login
 from src.routes.hsalen import loggs_hsalen
 from src.routes.portfolio_dj import portfolio_dj
-from src.services import db
-# from src.services import db
 from src.tags_metadata import tags_metadata
 
 app = FastAPI(openapi_tags=tags_metadata)
@@ -39,13 +37,10 @@ app.include_router(portfolio_dj.router, prefix="/portfolio_dj", tags=['Hypnosis 
 
 app.include_router(login.router, prefix="/login")
 
-print("this is the updated version")
-
 if __name__ == '__main__':
     # Drop the database and seed it
     # db.drop_log()
     # db.seed_log()
-    
 
     # Run the FastAPI application using Uvicorn server
     uvicorn.run(app, host="0.0.0.0", port=env.PORT)
